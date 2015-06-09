@@ -33,3 +33,11 @@ RUN python2.7 setup.py install
 # Install pip and virtualenv
 RUN curl https://raw.githubusercontent.com/pypa/pip/master/contrib/get-pip.py | python2.7 -
 RUN pip install virtualenv
+
+# Install pandas/ numpy / scipy / scikit-learn and their deps
+RUN yum install -y atlas-sse3-devel lapack-devel
+RUN pip install six==1.9.0
+RUN pip install pandas==0.16.1
+RUN pip install numpy==1.9.2
+RUN pip install scipy==0.15.1
+RUN pip install scikit-learn==0.16.1
