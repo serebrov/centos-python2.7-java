@@ -6,11 +6,25 @@ MAINTAINER Boris Serebrov
 RUN yum -y update
 RUN yum groupinstall -y development
 RUN yum install -y zlib-dev openssl openssl-devel sqlite-devel bzip2-devel
+RUN cat /var/log/yum.log
 
 RUN yum install -y tar
 RUN yum install -y git
 RUN yum install -y java-1.7.0-openjdk java-1.7.0-openjdk-devel
 RUN yum install -y gcc gcc-c++
+
+# Install postgresql
+RUN yum install -y postgresql-server
+RUN yum install -y postgresql-devel
+RUN service postgresql initdb
+RUN chkconfig postgresql on
+RUN service postgresql start
+RUN cat /var/lib/pgsql/pgstartup.log
+RUN cat /var/log/lastlog
+RUN service postgresql status
+RUN su -s /bin/sh -c "psql -h localhost -c \"ALTER USER postgres WITH PASSWORD 'root';\"" postgres
+RUN sed -ie 's/\(^host.*\)ident/\1md5/g' /var/lib/pgsql/data/pg_hba.conf
+RUN service postgresql restart
 
 # Install python 2.7.6
 WORKDIR /tmp
@@ -20,16 +34,6 @@ WORKDIR /tmp/Python-2.7.6
 RUN ./configure --prefix=/usr/local
 RUN make
 RUN make altinstall
-
-# Install postgresql
-RUN yum install -y postgresql-server
-RUN yum install -y postgresql-devel
-RUN service postgresql initdb
-RUN chkconfig postgresql on
-RUN service postgresql start
-RUN su -s /bin/sh -c "psql -c \"ALTER USER postgres WITH PASSWORD 'root';\"" postgres
-RUN sed -ie 's/\(^host.*\)ident/\1md5/g' /var/lib/pgsql/data/pg_hba.conf
-RUN service postgresql restart
 
 # create a symlink python -> python2.7
 RUN ln -s /usr/local/bin/python2.7 /usr/local/bin/python
@@ -63,6 +67,7 @@ RUN pip install pygments==2.0.2
 RUN pip install pyzmq==13.0.2
 RUN pip install protobuf==2.5.0
 RUN pip install protobuf-to-dict==0.1.0
+
 RUN pip install psycopg2==2.6.1
 RUN pip install SQLAlchemy==1.0.6
 RUN pip install Flask-SQLAlchemy-Session==1.1
