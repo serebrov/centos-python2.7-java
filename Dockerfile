@@ -14,17 +14,24 @@ RUN yum install -y java-1.7.0-openjdk java-1.7.0-openjdk-devel
 RUN yum install -y gcc gcc-c++
 
 # Install postgresql
-RUN yum install -y postgresql-server
-RUN yum install -y postgresql-devel
-RUN service postgresql initdb
-RUN chkconfig postgresql on
-RUN service postgresql start
-RUN cat /var/lib/pgsql/pgstartup.log
-RUN cat /var/log/lastlog
-RUN service postgresql status
-RUN su -s /bin/sh -c "psql -h localhost -c \"ALTER USER postgres WITH PASSWORD 'root';\"" postgres
-RUN sed -ie 's/\(^host.*\)ident/\1md5/g' /var/lib/pgsql/data/pg_hba.conf
-RUN service postgresql restart
+# Fails, postgres service stars with [OK], but then 
+# 'service postgresql status' shows 'postmaster dead but pid file exists'
+# Nothing in logs as well, it looks like it just crashes
+# And installation works if I log in into the container and run following commands manually
+# RUN yum install -y postgresql-server
+# RUN yum install -y postgresql-devel
+# RUN service postgresql initdb
+# RUN chkconfig postgresql on
+# RUN service postgresql start
+# RUN ls -la /var/log/
+# RUN cat /var/log/lastlog
+# RUN cat /var/lib/pgsql/pgstartup.log
+# RUN cat /var/lib/pgsql/data/pg_log/*
+# RUN ls -la /var/lib/pgsql/data/
+# RUN service postgresql status
+# RUN su -s /bin/sh -c "psql -h localhost -c \"ALTER USER postgres WITH PASSWORD 'root';\"" postgres
+# RUN sed -ie 's/\(^host.*\)ident/\1md5/g' /var/lib/pgsql/data/pg_hba.conf
+# RUN service postgresql restart
 
 # Install python 2.7.6
 WORKDIR /tmp
