@@ -18,8 +18,8 @@ RUN yum install -y gcc gcc-c++
 # 'service postgresql status' shows 'postmaster dead but pid file exists'
 # Nothing in logs as well, it looks like it just crashes
 # And installation works if I log in into the container and run following commands manually
-# RUN yum install -y postgresql-server
-# RUN yum install -y postgresql-devel
+RUN yum install -y postgresql-server
+RUN yum install -y postgresql-devel
 # RUN service postgresql initdb
 # RUN chkconfig postgresql on
 # RUN service postgresql start
