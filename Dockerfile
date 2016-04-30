@@ -41,8 +41,9 @@ RUN python2.7 setup.py install && \
 RUN pip install six==1.9.0 \
  numpy==1.9.2 \
  scipy==0.15.1 \
- scikit-learn==0.16.1 \
- pandas==0.16.1
+ scikit-learn==0.16.1
+
+RUN pip install pandas==0.16.1
 
 RUN pip install Flask==0.10.1 \
  boto==2.38.0 \
