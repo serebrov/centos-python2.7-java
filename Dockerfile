@@ -13,25 +13,10 @@ RUN yum install -y git
 RUN yum install -y java-1.7.0-openjdk java-1.7.0-openjdk-devel
 RUN yum install -y gcc gcc-c++
 
-# Install postgresql
-# Fails, postgres service stars with [OK], but then 
-# 'service postgresql status' shows 'postmaster dead but pid file exists'
-# Nothing in logs as well, it looks like it just crashes
-# And installation works if I log in into the container and run following commands manually
-RUN yum install -y postgresql-server
+RUN rpm -ivh http://dl.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+RUN yum install -y geos geos-devel geos-python
+RUN yum install -y mysql-devel
 RUN yum install -y postgresql-devel
-# RUN service postgresql initdb
-# RUN chkconfig postgresql on
-# RUN service postgresql start
-# RUN ls -la /var/log/
-# RUN cat /var/log/lastlog
-# RUN cat /var/lib/pgsql/pgstartup.log
-# RUN cat /var/lib/pgsql/data/pg_log/*
-# RUN ls -la /var/lib/pgsql/data/
-# RUN service postgresql status
-# RUN su -s /bin/sh -c "psql -h localhost -c \"ALTER USER postgres WITH PASSWORD 'root';\"" postgres
-# RUN sed -ie 's/\(^host.*\)ident/\1md5/g' /var/lib/pgsql/data/pg_hba.conf
-# RUN service postgresql restart
 
 # Install python 2.7.6
 WORKDIR /tmp
@@ -52,7 +37,7 @@ RUN tar -xvzf setuptools-1.4.2.tar.gz
 WORKDIR /tmp/setuptools-1.4.2
 RUN python2.7 setup.py install
 # Install pip and virtualenv
-RUN curl https://raw.githubusercontent.com/pypa/pip/master/contrib/get-pip.py | python2.7 -
+RUN curl https://bootstrap.pypa.io/get-pip.py | python2.7 -
 RUN pip install virtualenv
 
 # Install pandas/ numpy / scipy / scikit-learn and their deps
@@ -72,11 +57,15 @@ RUN pip install xmltodict==0.9.2
 RUN pip install markdown2==2.3.0
 RUN pip install pygments==2.0.2
 RUN pip install pyzmq==13.0.2
-RUN pip install protobuf==2.5.0
+RUN pip install protobuf==3.0.0b2
 RUN pip install protobuf-to-dict==0.1.0
 
+RUN pip install shapely==1.5.13
 RUN pip install psycopg2==2.6.1
 RUN pip install SQLAlchemy==1.0.6
 RUN pip install Flask-SQLAlchemy-Session==1.1
 RUN pip install alembic==0.7.6
 RUN pip install sqlalchemy-utils==0.30.12
+RUN pip install MySQL-python==1.2.5
+RUN pip install pprofile==1.7.3
+RUN pip install requests==2.9.1
