@@ -69,3 +69,17 @@ RUN pip install sqlalchemy-utils==0.30.12
 RUN pip install MySQL-python==1.2.5
 RUN pip install pprofile==1.7.3
 RUN pip install requests==2.9.1
+
+# for some reason after the installation, the pandas can not be imported
+# it fails with an error:
+#
+#    import pandas as pd
+#  File "/usr/local/lib/python2.7/site-packages/pandas/__init__.py", line 7, in <module>
+#    from pandas import hashtable, tslib, lib
+#  File "pandas/src/numpy.pxd", line 157, in init pandas.hashtable (pandas/hashtable.c:23789)
+#
+# ValueError: numpy.dtype has the wrong size, try recompiling
+#
+# Re-install fixes this problem
+RUN pip uninstall -y pandas
+RUN pip install pandas==0.16.1 --no-cache-dir
