@@ -10,7 +10,6 @@ RUN yum groupinstall -y development
 RUN yum install -y zlib-dev openssl openssl-devel sqlite-devel bzip2-devel \
         tar git java-1.7.0-openjdk java-1.7.0-openjdk-devel \
         gcc gcc-c++ \
-        geos geos-devel geos-python \
         mysql-devel postgresql-devel \
         atlas-sse3-devel lapack-devel && \
         cat /var/log/yum.log
@@ -36,6 +35,9 @@ RUN python2.7 setup.py install && \
     # Install pip and virtualenv
     curl https://bootstrap.pypa.io/get-pip.py | python2.7 - && \
     pip install virtualenv
+
+# install shapely dependencies, should be installed after python
+RUN yum install -y geos geos-devel geos-python
 
 # Install pandas/ numpy / scipy / scikit-learn and their deps
 RUN pip install six==1.9.0 \
